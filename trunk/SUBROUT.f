@@ -3804,11 +3804,13 @@
       RETURN
 999   CONTINUE
       WRITE(*,*)' MATRIX IMPOSSIBLE TO INVERT!!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 998   CONTINUE
       WRITE(*,*)'  IMPOSSIBLE TO PIVOT!!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 !!
       END
@@ -3872,11 +3874,13 @@
       RETURN
 999   CONTINUE
       WRITE(*,*)' MATRIX IMPOSSIBLE TO INVERT!!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 998   CONTINUE
       WRITE(*,*)'  IMPOSSIBLE TO PIVOT!!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 !!
       END
@@ -3961,7 +3965,8 @@
       RETURN
 999   CONTINUE
       WRITE(*,*)' IMPOSSIBLE TO FIND THE EIGENVECTORS!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 !
       END
@@ -4035,7 +4040,8 @@
       RETURN
 999   CONTINUE
       WRITE(*,*)' IMPOSSIBLE TO FIND THE EIGENVECTORS!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 !
       END
@@ -4118,7 +4124,8 @@
       RETURN
 999   CONTINUE
       WRITE(*,*)' IMPOSSIBLE TO FIND THE EIGENVECTORS!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 !
       END
@@ -4192,7 +4199,8 @@
       RETURN
 999   CONTINUE
       WRITE(*,*)' IMPOSSIBLE TO FIND THE EIGENVECTORS!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 !
       END
@@ -4281,7 +4289,8 @@
       RETURN
 999   CONTINUE
       WRITE(*,*)' IMPOSSIBLE TO FIND THE EIGENVECTORS!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 !
       END
@@ -4360,7 +4369,8 @@
       RETURN
 999   CONTINUE
       WRITE(*,*)' IMPOSSIBLE TO FIND THE EIGENVECTORS!!'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 !
       END
@@ -5367,7 +5377,8 @@
       CASE DEFAULT      
 !
         write(*,*)'The selected solver does not exist!'
-        pause
+        write (*,*) 'Pausing'
+        read (*,'()')
         stop
 !
       END SELECT
@@ -5601,7 +5612,8 @@
             write(*,'(a10,7f20.15)') 'vettore Qp:',
      &                                    (Qp(jj),jj=1,nvar)
             stop
-            pause
+            write (*,*) 'Pausing'
+            read (*,'()')
           endif
           if(EIGVAreal(k).lt.0.d0) then
             LAMB(K,K) = EIGVAreal(k)
@@ -5672,7 +5684,8 @@
 !
       CASE DEFAULT
       write(*,*)'The selected solver does not exist!'
-      pause
+      write (*,*) 'Pausing'
+      read (*,'()')
       stop
       END SELECT
 
@@ -6227,7 +6240,8 @@
       CASE DEFAULT      
 !
         write(*,*)'The selected solver does not exist!'
-        pause
+        write (*,*) 'Pausing'
+        read (*,'()')
         stop
 !
       END SELECT
@@ -6452,7 +6466,8 @@
             write(*,'(a10,7f20.15)') 'vettore Qp:',
      &                                    (Qp(jj),jj=1,nvar)
             stop
-            pause
+            write (*,*) 'Pausing'
+            read (*,'()')
           endif
           if(EIGVAreal(k).lt.0.d0) then
             LAMB(K,K) = EIGVAreal(k)

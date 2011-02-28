@@ -483,7 +483,8 @@ c ---------- calcolo del numero dei diversi tipi di maglie speciali
              sMAGS(jj,1)=sMAGS(jj,1)-hf(jMAGS(jj)) !correzione
              if(sMAGS(jj,1).LT.0.1) then
                write(*,*) 'errore quota maglia pressione ',jj
-               pause
+               write (*,*) 'Pausing'
+               read (*,'()')
              endif
 !           elseif(jTmS(jj).EQ.2) then
 !             maglieVeg=maglieVeg+1
@@ -1695,7 +1696,8 @@ c******************************************************************
           IF (J.NE.I) THEN
             IF (ABS(PROVV - RANDOdouble(J)).LT.1.D-14) THEN
              WRITE(*,*)'RILANCIARE:HA GENERATO 2 NUM RANDOM UGUALI!' 
-             PAUSE
+             write (*,*) 'Pausing'
+             read (*,'()')
              STOP
             ENDIF
           ENDIF
@@ -1795,7 +1797,8 @@ c******************************************************************
       enddo      
 !     DA CANCELLARE!!!
 !      write(*,*) 'MODIFICATO PORTATEEEEE'
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
 
 
 
@@ -1858,8 +1861,8 @@ C          NOTA: SONO LE PENDENZE IN METRI QUADRI,VANNO DIVISE PER L'AREA DELL'E
           write(*,*) 'attenzione se canale stretto puo'' dare 
      & NaN qundo estrapola fondo!!'
           write(*,*) 
-          pause
-          pause
+          write (*,*) 'Pausing'
+          read (*,'()')
         endif
       enddo
 !
@@ -2204,7 +2207,8 @@ C
       endif
       write(39) butta,nodi,maglie,ncan    !ncan non esiste
         write(*,*) 'effettuate valutazioni iniziali'
-        pause
+        write (*,*) 'Pausing'
+        read (*,'()')
 !
         RETURN
 c
@@ -2212,7 +2216,8 @@ c ************************** caso di errori di lettura **************
 c      
 101   write(*,*) 'ERRORE NELLE CONDIZIONI AL CONTORNO SUI LATI!!!!
      &LATO NON TROVATO',i,j
-      PAUSE 
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
       END
 !
