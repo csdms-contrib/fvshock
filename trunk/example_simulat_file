@@ -1,0 +1,117 @@
+  stringa con titolo del lavoro
+ **************** DATI GENERALI DELLA SIMULAZIONE *************************
+ 5                   nVAR
+ 3                   nf(numero di facce dell'elemento_NON IMPLEMENTATO),
+***************** SOLUTORE E ORDINE ***************************************
+ 100                   SOLVER: 0:FORCE2D  1:PRICE2D
+ 1                   ordineSCHEMA
+ 2                   ENO0WENO1(0=ENO,1=WENO,2=MUSCL)
+ 1                   beta (solo per MUSCL)  1:minmod   2:superbee                 
+ 0                   CARATT(0:ricostrNORMALE,1:ricostrVARcaratt)
+ 1                   kindROE(0:matrice analitica,1:numerica)
+ 3                   gaussROE        ( MAXgaussROE  = 5 )
+ 0                   igauss     0:primo ordine 1...MAXigauss: usa igauss punti di gauss sul lato ( MAXigauss = 3 )     
+ 1                   DELTAgau  
+ 1.D-8               DGlocalTOLL
+***************** COSTANTI VARIE ******************************************* 
+ 25996.5             gammas   : specific weight of sediment (N/m^3) (25996.5 N/m^3 =  2650 tons/m^3)
+ 9810                gamma    : specific weight of water (N/m^3)
+ 2.65                mm       : exponent for velocity in the power-law bed-load formula
+ 0.000340            aa       : costant factor in the power-law bed-load formula
+ 0.                  alfaCAO :Cao correction in bed-load formula ATTENZIONE QUANDO E' UNO PUO' MANDARE A INFINITO ALCUNI TERMINI IN MATRIX FARE ATTENZIONE alfa     : effect of the bottom temporal derivative in the continuity equation    0:no effect  1:maximum effect
+***************** COSTANTI VARIE TWO-LAYER SHALLOW WATER ******************************************* 
+ 0.8                 rDEN < 1 :density ratio between upper fluid and lower fluid
+***************** COSTANTI VARIE TWO-PHASE MODEL ******************************************* 
+ 0.5                 gam < 1 :density ratio between fluid and solid parts
+ 0                   mDRAG: esponente nel drag (source term)
+ 2                   etaT:       penso sia la falling velocity (source term)   
+ 0.53170943166148    tanPHI:     tan of phi, that is the basal friction angle (source term)
+ ***************** COSTANTI VARIE EULERO EQUATIONS ******************************************* 
+ 1.4                 gamEU   ratio of specific heats
+***************** SOURCE TERMS E VARIAZIONI NELLE EQUAZIONI **************** 
+ 1                   equat    :  1:CLASSIC SHALLOW WATER 2:TWO-LAYER SHALLOW WATER 3:TWO-PHASE MODEL   4:EULERO EQUATIONS
+ 0                   frict    :  0:without friction          1:with friction
+ 5                   KINDbedload:  1: power-law   2:power-law threshold (Uc)    3:meyer peter muller   4: qs=-q     5: pARKER(1990)
+ 0                   ifMOVINGbed:  0: fix bed      1:  Moving bed
+ 1                   testCASE :  Kind of testcase  17: Hudson(2005) 18: Leveque(non inizial) 19: Vara River
+***************** SOURCE TERMS E VARIAZIONI NELLE EQUAZIONI **************** 
+ 1.D-15              tolWET
+***************** DT DI CALCOLO E OUTPUT *********************************** 
+  10   0.5  10  10 0   1   0   0.12 0.24 0.36 0.48                 TT,CFL,iprt,ivid,iReynolds,iVariazConc(dc/dx dc/dy),nTTinterm,TTinterm(i)
+ example_geometry_file.geo                                                       
+ damBREAK_IDR.out
+ damBREAK_LIV.out
+ damBREAK_VARIE.out
+***************** CONDIZIONI INIZIALI DELLA SIMULAZIONE *********************************** 
+ 0                   0: impongo superficie libera nella prima componente del file di restart      1:impongo tirante
+ 0.50000             livello iniziale
+ 1                    eventuale lettura da restart   
+ example_restart_file.bup            								damBREAK_800m_1m0.1m.bup                                                              HudsonPERandareAperman.bup              nome file restart
+****************** TABELLE DATI VARIABILI NEL TEMPO ***************
+ 1   numero di tabelle        NOTA: PORTATE VANNO IN m^3/s ed è la portata che entra per ogni lato (quindi se lati diversi bisogna mettere le mani al codice e calcolarsi la somma lati contorno e inserire da sim la Q totale su tutto il contorno e poi dividere)
+  5000000  2      intervallo   valori
+  0.000285714285714  0.000285714285714
+****************** CONDIZIONI AL CONTORNO *************************
+ 1                   0: impongo superficie libera nelle condizioni al contorno                    1:impongo tirante 
+ 0 lati su cui si assegnano i livelli
+ 0 lati su cui si assegnano le portate lungo x
+ 0 lati su cui si assegnano le portate lungo y
+ 0 lati su cui si assegnano le concentrazioni
+ 0 lati su cui si assegnano le quote del fondo
+ 0  1  lati su cui si assegna  radiation,typeRAD 0:Copia valori sulla ghost. 1:Copia valori ma abbassa fondo e H del valore calcolato dalle condizioni iniziali(vale a fondo fisso)
+ 0 lati con scala delle portate
+ 0 0  lista12,lista34. numero di lati per ogni lista (della coppia) di condizioni al contorno di tipo (reciprocamente) periodica. E devono essere creati progressivamente da una lista partendo dalla stessa direzione per ogni coppia (da sx a dx per esempio o da dx a sx per entrambi i contorni della coppia)
+******************* DATI RELATIVI AL TRASPORTO SOLIDO **************
+ damBREAK_BOTTOM.out
+ damBREAK_CONC.out
+   1.  0.2                          acceleraSIM,dtTS
+   1      INCOERENTI (1 se materiale incoerente, 0 se coesivo)
+   0.400000  4.  33.333    PoroSol,grain,sksVERO
+   0.000 10.000000   1.0    1.0      Cdry,Co,perCstampa,perQCstampa
+   0     numero di maglie non erodibili
+
+
+
+
+
+
+  103  77     
+  77   57     
+  57   41     
+  41   24     
+  24   12     
+  12   5      
+  5    1      
+  1    2      
+  2    6      
+  6    13     
+  13   25     
+  25   43     
+  43   59     
+  59   80     
+  80   107    
+  107  134    
+  134  163    
+  163  190    
+  190  224    
+  224  255    
+  2152   2150  
+  2150   2161  
+  2161   2160  
+  2160   2134  
+  2134   2135  
+  2135   2137  
+  2137   2159  
+  2159   2133  
+  2133   2156  
+  2156   2171  
+  2171   2157  
+  2157   2172  
+  2172   2173  
+  2173   2176  
+  2176   2175  
+  2175   2174  
+  2174   2166  
+  2166   2167  
+  2167   2168  
+  2168   2163  
