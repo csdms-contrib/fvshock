@@ -1,0 +1,245 @@
+      INTEGER MAXNOD,MAXELE,MAXELES,MAXFLU,MAXNH,MAXTAB,MAXNTB,
+     &   MAXNR,MAXNS,MAXVAR,MAXNC,MAXigauss,MAXDELTAgau,MAXne,
+     &   MAXLL,MAXLLt,MAXLLt_LL,MAXNP,MAXgaussROE
+        REAL g
+        REAL*8 pigr
+        REAL*8 NI,TETAcrMEYER 
+c
+c  Dimensioni massime dei vettori del modello bidimensionale
+c
+      PARAMETER (MAXVAR=7)     	! Massimo numero di variabili
+      PARAMETER (MAXNOD=15000)	      ! Massimo numero di nodi
+	PARAMETER (MAXELE=20000)	      ! Massimo numero di elementi
+	PARAMETER (MAXELES=1000)	! Massimo numero di elementi speciali
+	PARAMETER (MAXFLU=500000)	! Massimo numero di lati
+	PARAMETER (MAXNH=1000)		! Massimo numero di nodi per le condizioni di Dirichlet per il livello
+	PARAMETER (MAXTAB=10)		! Massimo numero di tabelle per le Condizioni al Contorno
+	PARAMETER (MAXNTB=3000)		! Massimo numero di valori per ogni tabella delle C.C.
+	PARAMETER (MAXNC=300)		! Massimo numero di nodi per le condizioni di Neumann
+	PARAMETER (MAXNS=300)		! Massimo numero di lati per la scala delle portate
+      PARAMETER (MAXNR=300)		! Massimo numero di lati per RADIATION
+      PARAMETER (MAXNP=3000)		! Massimo numero di lati per condizioni(reciprocamente) periodiche
+      PARAMETER (MAXigauss = 3)
+      PARAMETER (MAXgaussROE=3)
+      PARAMETER (MAXLL =(MAXigauss+1)*(MAXigauss+2)/2)
+      PARAMETER (MAXne = MAXLL*2)
+      PARAMETER (MAXLLt=(MAXigauss+1)*(MAXigauss+2)*(MAXigauss+3)/6)  
+      PARAMETER (MAXLLt_LL=MAXLLt-MAXLL)
+      PARAMETER (MAXDELTAgau=1)
+	
+c
+	PARAMETER (g=9.810)
+        PARAMETER (NI=0.0000012)
+	PARAMETER (pigr=3.141592653589793)
+        PARAMETER (TETAcrMEYER=0.047)
+c
+c
+C
+c ---------------------------- GENERALI ---------------------------------
+	COMMON/GEN1/ TT,dt,t
+	COMMON/GEN2/ iReynolds,irestart
+	COMMON/GEN3/ filenameIDR
+	COMMON/GEN4/ iprt,ivid,itbed,ntime
+c ---------------------------- GEOMETRIA GENERALI -----------------------
+	COMMON/GEO1/ nodi,maglie,nodS,magS,ncan,ntroS,n123 ,nf     ! nf è il numero di facce del poligono
+	COMMON/GEO2/ Ylim,sks,hf
+	COMMON/GEO3/ x,y,Area,AreaNod
+	COMMON/GEO4/ jAD,kAD,zf
+	COMMON/GEO5/ xG,yG,sLATI
+	COMMON/GEO6/ B1,B2,B3
+	COMMON/GEO7/ C1,C2,C3
+	COMMON/GEO8/ numerolati,latiflux
+	COMMON/GEO9/ bedSx,bedSy
+	COMMON/GEO10/ xNORM,yNORM,zfo
+c ---------------------------- ELEMENTI SPECIALI ---------------------------
+        COMMON/MGS1/ jMAGS,jTmS,kMAGS
+        COMMON/MGS2/ sMAGS
+        COMMON/MGS3/ magliePress,jELEmagS
+c ---------------------------- NODI SPECIALI ---------------------------
+        COMMON/NDS1/ jNODS,jTnS,JnodINERO
+        COMMON/NDS2/ sNODS,hfINERO 
+        COMMON/NDS3/ nodINERO
+c ---------------------------- TRONCHI SPECIALI --------------------------------
+c ---------------------------- CONDIZIONI AL CONTORNO -------------------------
+	COMMON/BND1/ DTTAB,CCNT
+	COMMON/BND2/ NTAB
+	COMMON/BND4/ percX,percY
+	COMMON/BND5/ VTAB
+	COMMON/BND6/ nS,jScont,nR,jRcont,nP,jPcont
+	COMMON/BND7/ QSzero,alfaS,HSfondo
+	COMMON/BND8/ percSX,percSY
+c ---------------------------- IDRODINAMICA -----------------------------
+      COMMON/VAR/  nVAR
+	COMMON/IDR2/ HHo
+	COMMON/IDR3/ HoLati
+	COMMON/IDR5/ eddy
+	COMMON/IDR7/ Rxx ,Rxy ,Ryy 
+c ---------------------------- TRASPORTO SOLIDO -------------------------
+      COMMON/TSO1/ PoroSol,grain,densRel,dtTS,acceleraSIM,sksVERO
+      COMMON/TSO2/ Nfix,Jfix 
+      COMMON/TSO3/ qsx ,qsy ,DEnod 
+      COMMON/TSO4/ JeleINERO ,hfnod 
+      COMMON/TSO5/ mmmm
+      COMMON/TSO6/ filenameLIV,filenameBOTTOM,filenameCONC,
+     &             filenameVARIE2,filenameVARIE
+C
+      character*30 filenameLIV,filenameIDR,filenameBOTTOM,filenameCONC
+     *               ,filenameVARIE,filenameVARIE2
+c ---------------------------- RISOLUTORE di RIEMANN -----------------------
+C
+C--------------------AGGIUNTI IN QUESTA VERSIONE RISPETTO ALLA VERSIONE BASE-----------------------
+      COMMON/NUOVI/ XgauLATO,YgauLATO,
+     *XcenLATO,YcenLATO,
+     *pgauTRASF,
+     *Xgau,
+     *Ygau,
+     *WgauTRASF,
+     *CSghost,
+     *deltaq,
+     *percCS,
+     *PRIM,CS ,Vm ,
+     *Vplus,
+     *CSnod,Cdry,Co,perCstampa,perQCstampa,
+     *DEPOS ,
+     *EROS ,VelCad,alfa,tetaCR,esponente,tauCRdepMAX,tauCRdepMIN,
+     *tauCReroCOES,coeffM,DensMisc0 ,xNORMAL,yNORMAL,
+     *gamma,gammas,DELTA,mm,aa,TETAeff,TETA,alfaCAO,pgau,
+     *wgau,xNORMmaglia,yNORMmaglia,
+     *xPARALLmaglia ,yPARALLmaglia,beta,tolWET,
+     *AleastINV,
+     *OI,OI_T,
+     *epsWENO,lambdaW,rWENO,Aref,
+     *Akl,MASS,
+     *Kxi,Ktau,TRANSbasis,
+     *Ktau11INV,xiN,
+     *etaN,tauN,Fm,
+     *F0,Fp,THETAbarF,
+     *Kt11invKt10,
+     *KT11INVMASS11,KT11INVMASS10,
+     *KT11INVKXI11,KT11INVKXI10,
+     *KT11INVKETA11,KT11INVKETA10,
+     *intSOURCE,DOGok,
+     *DOGst,Dinc,CFL,DGlocalTOLL,rDEN,
+     *gam,mDRAG,etaT,tanPHI,gamEU,TTinterm,Heff,Yeff,
+     *pgauTRASF01,cost1up,cost2up,
+     *costFOR1up,costFOR2up,
+     *setteTERZI,sks2,AreaINV,Trot,TrotINV,fBOT,fINT,ai,
+     *bi,DxG,DxG2,DyG,
+     *DyG2,DxGyG,XcenLATO_xG,
+     *YcenLATO_yG,
+     *numCONTORNO,DAintAghost,
+     *DAghostAint,jCStab,
+     *jCScont,NccCS,jCcont,incoerenti,iVariazConc,
+     *jFONDO,ordineSCHEMA,ENO0WENO1,frict,KINDbedload,
+     *ifMOVINGbed,testCASE,igauss,matrIMPOSTA,kindROE,gaussROE,
+     *CARATT,DELTAgau,maglieGHOST,WHEREq,SOLVER,Mpol,
+     *STENCIL,nSTE,whichSTE,
+     *mem,LL,LLt,ne,lista12,lista34,stampaULTIMO,Jperiod,
+     *ghostHAcont,GHOSTimperm,nIMPERM,
+     *equat,nWHEREq,jcond,jCondCS,
+     *jCondR,
+     *STEcenLIMIT,contTTinterm,nTTinterm,nstampa,
+     *typeRAD,tirCONT,asc,BorSzero,Dvar,solute,
+     *epart,npart,jtime,igaussp1,igaussP1quad,
+     *LdaINTaGHOST,QUADRfreeGAU
+c
+      REAL*8 TT,dt,t,Ylim(MAXELE),sks(MAXELE),hf(MAXELE),
+     *  x(MAXNOD),y(MAXNOD),Area(MAXELE),AreaNod(MAXNOD),zf(MAXNOD),
+     *  xG(MAXELE*2),yG(MAXELE*2),sLATI(3,MAXELE),B1(MAXELE),B2(MAXELE),
+     *  B3(MAXELE),C1(MAXELE),C2(MAXELE),C3(MAXELE),bedSx(MAXELE),
+     *  bedSy(MAXELE),xNORM(MAXFLU),yNORM(MAXFLU),
+     *  zfo(MAXNOD),sMAGS(MAXELES,3),sNODS(MAXNOD,2),hfINERO(MAXNOD),
+     *  DTTAB(MAXTAB),CCNT(MAXNTB,MAXTAB),percX(MAXVAR,MAXNC),
+     *  percY(MAXVAR,MAXNC),
+     *  VTAB(MAXTAB),QSzero(MAXNS),alfaS(MAXNS),HSfondo(MAXNS),
+     *  percSX(MAXNS),percSY(MAXNS),
+     *  HHo,HoLati(MAXELE,3),
+     *  eddy(MAXELE),qxNod(MAXNOD),
+     *  qyNod(MAXNOD),Rxx(MAXELE),Rxy(MAXELE),Ryy(MAXELE),PoroSol,
+     *  grain,densRel,dtTS,acceleraSIM,sksVERO,qsx(MAXELE),qsy(MAXELE),
+     *  DEnod(MAXNOD),hfnod(MAXNOD)
+!
+      INTEGER iReynolds,irestart,iprt,ivid,itbed,ntime,nodi,maglie,
+     *  nodS,magS,ncan,ntroS,n123(4,MAXELE),jAD(MAXELE,3),kAD(MAXELE,3),
+     *  numerolati,latiflux(MAXFLU,2),jMAGS(MAXELES),jTmS(MAXELES),
+     *  kMAGS(MAXELES,3),magliePress,jELEmagS(MAXELE),jNODS(MAXNOD),
+     *  jTnS(MAXNOD),JnodINERO(MAXNOD),nodINERO,NTAB,
+     *  nS,jScont(MAXNS,2),nR,jRcont(MAXNR,2),
+     *  Nfix,Jfix(MAXELE),mediaFlag,JeleINERO(MAXELE),mmmm,incoerenti 
+C
+C--------------DICHIARAZIONI AGGIUNTE IN QUESTA VERSIONE RISPETTO ALLA VERSIONE BASE-----------------------
+C
+      REAL*8 XgauLATO(MAXigauss,3,MAXELE),YgauLATO(MAXigauss,3,MAXELE),
+     *XcenLATO(MAXELE,3),YcenLATO(MAXELE,3),
+     *pgauTRASF(MAXigauss + MAXDELTAgau,MAXigauss + MAXDELTAgau),
+     *Xgau((MAXigauss + MAXDELTAgau)*(MAXigauss + MAXDELTAgau),
+     *MAXigauss + MAXDELTAgau,MAXELE),
+     *Ygau((MAXigauss + MAXDELTAgau)*(MAXigauss + MAXDELTAgau),
+     *MAXigauss + MAXDELTAgau,MAXELE),
+     *WgauTRASF((MAXigauss + MAXDELTAgau)*(MAXigauss + MAXDELTAgau),
+     *MAXigauss + MAXDELTAgau,MAXELE),
+     *CSghost(MAXVAR,MAXELE),
+     *deltaq(MAXELE,MAXVAR,6),
+     *percCS(MAXVAR,MAXNC),
+     *PRIM(MAXVAR,MAXELE),CS(MAXVAR,2*MAXELE),Vm(MAXELE),
+     *Vplus(1:3,MAXELE),
+     *CSnod(MAXVAR,MAXNOD),Cdry,Co,perCstampa,perQCstampa,
+     *shear(MAXELE),DEPOS(MAXELE),  !NOTA tau è il tempo sul sistema di rif, lo sforzo al fondo è shear
+     *EROS(MAXELE),VelCad,alfa,tetaCR,esponente,tauCRdepMAX,tauCRdepMIN,
+     *tauCReroCOES,coeffM,DensMisc0,xNORMAL,yNORMAL,
+     *gamma,gammas,DELTA,mm,aa,TETAeff(MAXELE),TETA,alfaCAO,pgau(12,12),
+     *wgau(12,12),xNORMmaglia(3,MAXELE),yNORMmaglia(3,MAXELE),
+     *xPARALLmaglia(MAXELE,3),yPARALLmaglia(MAXELE,3),beta,tolWET,
+     *AleastINV(MAXLL+1,MAXLL+1,7,MAXELE),
+     *OI(MAXLL,MAXLL),OI_T(MAXLL,MAXLL),
+     *epsWENO,lambdaW(7),rWENO,Aref(2,2,MAXELE),
+     *Akl(2 * MAXLL,MAXLL,7,MAXELE),MASS(MAXLLt,MAXLLt),
+     *Kxi(MAXLLt,MAXLLt),Ktau(MAXLLt,MAXLLt),TRANSbasis(MAXLL,MAXLL),
+     *Ktau11INV(MAXLLt-MAXLL,MAXLLt-MAXLL),xiN(MAXLLt),
+     *etaN(MAXLLt),tauN(MAXLLt),Fm(MAXLL,MAXLLt,3),
+     *F0(MAXLL,3),Fp(MAXLL,MAXLLt,3),THETAbarF(MAXLLt,3),
+     *Kt11invKt10(MAXLLt_LL,MAXLL),
+     *KT11INVMASS11(MAXLLt_LL,MAXLLt_LL),KT11INVMASS10(MAXLLt_LL,MAXLL),
+     *KT11INVKXI11(MAXLLt_LL,MAXLLt_LL),KT11INVKXI10(MAXLLt_LL,MAXLL),
+     *KT11INVKETA11(MAXLLt_LL,MAXLLt_LL),KT11INVKETA10(MAXLLt_LL,MAXLL),
+     *intSOURCE(MAXLL,MAXLLt),DOGok(MAXVAR,MAXLL,MAXELE),
+     *DOGst(MAXVAR,MAXLLt,2*MAXELE),Dinc(MAXELE),CFL,DGlocalTOLL,rDEN,
+     *gam,mDRAG,etaT,tanPHI,gamEU,TTinterm(10),Heff(MAXELE),Yeff(MAXELE)
+     *,pgauTRASF01(MAXgaussROE),cost1up(3,MAXELE),cost2up(3,MAXELE),
+     *costFOR1up(3,MAXELE),costFOR2up(3,MAXELE),
+     *setteTERZI,sks2(MAXELE),AreaINV(MAXELE),
+     *Trot(MAXVAR,MAXVAR,3,MAXELE),
+     *TrotINV(MAXVAR,MAXVAR,3,MAXELE),fBOT,fINT,ai(MAXVAR,MAXELE),
+     *bi(MAXVAR,MAXELE),DxG(3,MAXELE),DxG2(3,MAXELE),DyG(3,MAXELE),
+     *DyG2(3,MAXELE),DxGyG(3,MAXELE),XcenLATO_xG(3,MAXELE),
+     *YcenLATO_yG(3,MAXELE)
+     
+      
+
+c
+      INTEGER  numCONTORNO(MAXELE),DAintAghost(MAXELE,3),
+     *         DAghostAint(MAXELE,2),jCStab(MAXVAR,MAXNC),
+     *         jCScont(MAXVAR,MAXNC,2),
+     *         NccCS(MAXVAR),jCcont(MAXNC,2),iVariazConc,       !jFONDO indica su quale posiz del vettore incognite ho la quota del fondo
+     *         jFONDO,ordineSCHEMA,ENO0WENO1,frict,KINDbedload,
+     *         ifMOVINGbed,testCASE,igauss,matrIMPOSTA,kindROE,gaussROE,
+     *         CARATT,DELTAgau,nf,nVAR,maglieGHOST,WHEREq(5),SOLVER,Mpol
+     *         ,STENCIL(MAXne,7,MAXELE),nSTE(MAXELE),whichSTE(7,MAXELE),
+     *         mem(MAXELE,20),LL,LLt,ne,np,lista12,lista34,
+     *         jPcont(MAXNP,2),stampaULTIMO,Jperiod(MAXELE,3),
+     *         ghostHAcont(MAXELE),GHOSTimperm(MAXELE),nIMPERM, 
+     *         equat,nWHEREq,jcond(MAXELE,3),jCondCS(MAXVAR,MAXELE,3),
+     *         jCondR(MAXELE,3),
+     *         STEcenLIMIT(MAXELE),contTTinterm,nTTinterm,nstampa,
+     *         typeRAD,tirCONT,asc(maxele),BorSzero,Dvar,solute,
+     *         epart(MAXELE),npart(MAXNOD),jtime,igaussp1,igaussP1quad,
+     *         LdaINTaGHOST(MAXLLt,3),QUADRfreeGAU
+ 
+
+c  NOTA: VARIABILI CHE SI POSSONO ELIMINARE
+c  CSconGHOST in reconstractiun e riscrivere usando solo CS
+c  deltaq(i,j,6) posso togliere 6 e mettere 3 e riscrivere function che calcono derivate 
+c ! ai(j,i),bi(j,i) posso lasciarli funzione di j in RECONSTRUCTION
+c !SI guadagna un 100 e passa mega se  elimino la dimensione MAXELE in DOGsouNC
+c ! e lo calcolo in  UPDATEweno però ovviamente rallenta un pò
+c   su UPDATEmuscl c'è sicuramente un pacco di roba da cancellare
