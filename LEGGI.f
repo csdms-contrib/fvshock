@@ -92,7 +92,8 @@ c
           if(jmTAB.gt.MAXNTB) then
             write(*,*) jmTAB
             write(*,*)'Una tabella troppo grande (CR per finire)'
-            pause
+            write (*,*) 'Pausing'
+            read (*,'()')
             go to 98
           endif
           read(1,*,ERR=98) (CCNT(j,i),j=1,jTAB)
@@ -107,7 +108,8 @@ c
         if(NccCS(K).gt.MAXNC) then
           write(*,*)'Troppi lati con valore imposto per 
      &la ',K,'a variabile (CR per finire)'
-          pause
+          write (*,*) 'Pausing'
+          read (*,'()')
           go to 98
         else
            write(*,*)NccCS(K),' lati con ',K,'a variabile assegnata'
@@ -124,7 +126,8 @@ c
       read(1,*,ERR=98) nR,typeRAD
       if(nR.gt.MAXNR) then
         write(*,*)'Troppi nodi di radiation (CR per finire)'
-        pause
+        write (*,*) 'Pausing'
+        read (*,'()')
         go to 98
       else
         write(*,*)nR,' lati con condizione di radiation'
@@ -141,7 +144,8 @@ c
       read(1,*,ERR=98) nS
       if(nS.gt.MAXNS) then
         write(*,*)'Troppi nodi scala Q (CR per finire)'
-        pause
+        write (*,*) 'Pausing'
+        read (*,'()')
         go to 98
       else
         write(*,*)nS,' lati con scala delle portate'
@@ -160,7 +164,8 @@ c
       if(nP.gt.MAXNP) then
         write(*,*)'Troppi nodi con condizione (reciprocamente) periodica 
      &(CR per finire)'
-        pause
+        write (*,*) 'Pausing'
+        read (*,'()')
         go to 98
       else
         write(*,*)nP,' lati con condizione (reciprocamente) periodica'
@@ -326,19 +331,24 @@ c
 c ************************** caso di errori di lettura **************
 c      
 96      write(*,*) 'ERRORE NEL FILE .BUP'
-       pause
+       write (*,*) 'Pausing'
+       read (*,'()')
        STOP
 97      write(*,*) 'ERRORE NEL FILE .GEO'
-       pause
+       write (*,*) 'Pausing'
+       read (*,'()')
        STOP
 98      write(*,*) 'ERRORE NEL FILE .SIM'
-       pause
+       write (*,*) 'Pausing'
+       read (*,'()')
        STOP
 99      write(*,*) 'ERRORE NEL FILE .SIM (TS)'
-      pause
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
 100     write(*,*) 'ERRORE NELLA STAMPA'
-      PAUSE 
+      write (*,*) 'Pausing'
+      read (*,'()')
       STOP
       END
       

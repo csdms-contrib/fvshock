@@ -135,7 +135,8 @@ c
         CASE DEFAULT
 
           write(*,*) 'Order of the scheme not admitted!!'
-          pause
+          write (*,*) 'Pausing'
+          read (*,'()')
           stop          
         END SELECT
 !
@@ -217,7 +218,8 @@ c
       write (*,*) VOLfin/800.D0/200.D0
 !
       close(3232)
-      PAUSE
+      write (*,*) 'Pausing'
+      read (*,'()')
        STOP
       END
 

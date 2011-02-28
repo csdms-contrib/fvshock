@@ -66,7 +66,8 @@ c
      &VALORE E'' IMMAGINARIO e vale a+i*b,con a=',EIGreal(k),
      &'e con b=',EIGimm(k)
                 stop
-                pause
+                WRITE (*,*) 'Pausing'
+                READ (*,'()')
               endif
               lambdaPROVV = abs(EIGreal(k))  !sqrt(EIGreal(k)**2+EIGimm(k)**2) non ha senso farci il val assoluto visto che se è immaginario esco.
               if (lambdaPROVV.gt.lambda) lambda=lambdaPROVV
